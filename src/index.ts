@@ -1,17 +1,12 @@
 import { v4 as uuidV4 } from 'uuid';
-
-type Task = {
-  id: string;
-  title?: string;
-  completed: boolean;
-  createAt: Date;
-};
+import { taskList, add, remove, Task } from './tasklist';
 
 const list = document.querySelector<HTMLUListElement>('#list');
 const form = document.getElementById('new-task-form') as HTMLFormElement;
 const input = document.querySelector<HTMLInputElement>('#new-task-title');
 
-const tasks: Task[] = loadTasks();
+const tasks = taskList;
+console.log(taskList)
 tasks.forEach(listHandler);
 
 form?.addEventListener('submit', (e) => {
@@ -26,7 +21,9 @@ form?.addEventListener('submit', (e) => {
   };
 
   tasks.push(newTask);
-  saveTasks();
+
+add
+  console.log(add);
   listHandler(newTask);
   input.value = '';
 });
@@ -39,29 +36,17 @@ function listHandler(task: Task) {
     task.completed = checkbox.checked;
     if (task.completed === true) {
       item.removeChild(label);
-
-      const task = tasks.find(t => t.id === id)
-      const taskIdx = tasks.indexOf(task)
+      remove('item');
+    
     }
-
-    saveTasks();
+    remove('item')
   });
 
   checkbox.type = 'checkbox';
   checkbox.checked = task.completed;
   label.append(checkbox, task.title as string);
   item.dataset.itemId = task.id;
-  console.log(item.dataset.itemId)
+  console.log(item.dataset.itemId);
   item.append(label);
   list?.append(item);
-}
-
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-function loadTasks(): Task[] {
-  const taskJSON = localStorage.getItem('tasks');
-  if (taskJSON == null) return [];
-  return JSON.parse(taskJSON);
 }
